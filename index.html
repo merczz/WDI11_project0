@@ -1,111 +1,10 @@
+
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-	<style>
-	body{
-		color: #FAF8EF;
-    	background: #faf8ef;
-    	margin: 0px 140px;
-    	padding: 0px;
-    	color: #FAF8EF;
-    	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-    	font-size: 18px;
-	}
-	.title {
-	display: block;
-	position: absolute;
-	width: 100px;
-	top: 30px;
-    color: #776E65;
-    font-size: 50px;
-    font-weight: bold;		
-	}
-	.tblScore-cell {
-	padding-left: 5px;
-   	color: #eee4da;
-    font-size: 16px;
-	width: 100px;
-	height: 60px;
-	background-color: #bbada0;
-	vertical-align: top;
-	}
-	.tblScore {
-		position: absolute;
-		top: 30px;
-		left: 300px;
-		border-radius: 5px;
-		border-spacing: 5px;
-		border-collapse: separate;
-	}
-	.tbl-cell {
-		width: 60px;
-		height: 60px;
-		background-color: #D0C6A8;
-	}
-	.tbl {
-		position: absolute;
-		top: 140px;
-		background-color: #989587;
-		border-radius: 5px;
-		border-spacing: 5px;
-		border-collapse: separate;
-	}
-	.best, .score {
-		position: absolute;
-		color: #FAF8EF;
-    	font-size: 20px;
-    	font-weight: bold;
-    	text-align: right;
-	}
-	.score {
-		top:25px;
-    	left:15px;
-	}
-	.best {
-		top:25px;
-		left:126px;
-	}
-	.start {
-		position: absolute;
-		background-color:#989587;
-		width: 100px;
-		height: 30px;
-		font-size: 14px;
-		font-weight: bold;
-		top: 100px;
-		left: 150px;
-		line-height: 30px;
-		text-align: center;
-		border-radius: 5px;
-
-	}
-	.tile {
-	position:absolute;
-	color: #776e65;
-	font-size: 18px;
-	font-weight: bold;
-	text-align: center;
-	line-height: 55px;
-	top:145px;
-	left:145px;
-	background-color: #eee4da;
-	width:60;
-	height:60;
-	}
-	/* tile x-y
-	1-1 340, 105
-	1-2 275
-	1-3  210
-	1-4 t145, l 105
-	1-1 340, 105
-	2-1 340 170
-	3-1 340  235
-	4-1 340  300
-	*/
-	</style>
-
+		<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="title">2048</div>
@@ -115,7 +14,7 @@
 		<td class="tblScore-cell">best<span class="best"></span></td>
 	</tr>
 </table>
-<div class="start">New Game</div>
+<div class="start"><a>New Game</a></div>
 <table class="tbl">
 	<tr class="tbl-row">
     	<td class="tbl-cell"></td>
@@ -143,96 +42,100 @@
   	</tr>
 </table>
 <div class="tileHolder">
-	<div class="row1"></div>
-	<div class="row2"></div>
-	<div class="row3"></div>
-	<div class="row4"></div>
 </div>
 <div class='result'></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="script.js"></script>
 <script>
-$(document).ready(function() {
-     //inital position
-   // var $(holder) = $('.tileHolder');
-// function AddTile(){//add tile at random location
-// 	 var tileRow = Math.floor(Math.random()*4);
-// 	 var tileCol = Math.floor(Math.random()*4);
-// 	 var minX = 145;
-// 	 var minY = 105;
-// 	 var incr = 65;
-// 	 var x = 0;
-// 	 var y = 0;
-// 	 var t = $('div');
-// 	 var classname = '.tile'+tileRow+'-'+tileCol;
-// 	 t.addClass(classname);
-//   		x = minX + tileCol*incr;
-//    		y = minY + tileRow*incr;
-//    		t.css( { left: x + "px", top: y + "px" } ) 
-//    		t.addClass('.tile');
-//    		console.log($(holder).children()[tileRow]);
-//    	return;
-// }
-// }
 
-var score =0;
-var best = 0;
-var isNewGame = true;
-var numTile = 0; //max = 16;
-$(".score").text(score);
-$(".best").text(best);
+$(document).keydown(function(e) {
+	    switch(e.which || e.keycode) {
+	        case 37: // left
+		        keyMoveLeft();
+		        printArray();
+	        break;
 
+	        case 38: // up
+	            keyMoveUp();
+		        printArray();
+	        break;
 
-function addScore(v){
-	score += v;
-	if (score>best) {
-		best = score;
-	}
-	$(".score").val(score);
-	$(".best").val(best);
-}
+	        case 39: // right
+		        keyMoveRight();
+		        printArray();
+	        break;
 
-function getDistance(x){ //x can be row or col number, 0<=x<=3
-	var minVal = 145; //origin start at (145,145)
-	var incr = 65;
-	return minVal+incr*(x+1);
-}
-	
-    //.css({top: minY, left: minX});
-    //t.addClass('.tile');
-    var arrRow = ["div.row1","div.row2","div.row3","div.row4"]
-    var numRow = Math.floor(Math.random()*4); //return 0-3
-    var numCol = Math.floor(Math.random()*4);
-    var topVal = getDistance(numRow);
-    var leftVal = getDistance(numCol);
+	        case 40: // down
+	        	keyMoveDown();
+	        	printArray();
+	        break;
 
-    var thisRow = arrRow[numRow];
-    $(thisRow).append($("<div class="+"'tile'"+"></div>"));
-    
+	        default: return; // exit this handler for other keys
+    	}
+    $(".score").text(thisScore);
+	$(".best").text(bestScore);	
+
+    e.preventDefault(); // prevent the default action (scroll / move caret)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		var minVal = 145; //origin start at (145,145)
+		var incr = 65; // x = minVal+incr*(x+1);
+		var topV = 0;
+		var leftV = 0;
+	   var box = $(".tileHolder");
+	   box.empty();
+	     for (var i =0; i<maxLen; i++) { //row
+	     	for (var a=0; a<maxLen; a++) {  //col
+	     		topV = minVal+incr*i;
+	     		leftV = minVal+incr*a;
+	     		if(arrData[i][a]>0) {
+	      		    $('<div/>', {
+					    class: 'tile',
+					    style: "top:"+ topV + "px;left:" + leftV + "px",
+					    text: arrData[i][a]
+					}).appendTo(box);
+				}
+			}
+		}
+		if(!hasLeftMove && !hasRightMove && !hasUpMove && !hasDownMove) {
+			thisScore = 0;
+			alert("Game End");
+		}
 
 });
+
+
+$(document).ready(function() {
+
+
+$('div.start').click(function(){
+    
+        var minVal = 145; //origin start at (145,145)
+		var incr = 65; // x = minVal+incr*(x+1);
+		var topV = 0;
+		var leftV = 0;
+	   var box = $(".tileHolder");
+	   box.empty();
+	   newGame();
+	    $(".score").text(0);
+	     for (var i =0; i<maxLen; i++) { //row
+	     	for (var a=0; a<maxLen; a++) {  //col
+	     		topV = minVal+incr*i;
+	     		leftV = minVal+incr*a;
+	     		if(arrData[i][a]>0) {
+	      		    $('<div/>', {
+					    class: 'tile',
+					    style: "top:"+ topV + "px;left:" + leftV + "px",
+					    text: arrData[i][a]
+					}).appendTo(box);
+				}
+			}
+		}
+});
+
+});
+
+
 </script>
 </body>
 </html>

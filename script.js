@@ -1,49 +1,42 @@
 var arrData = [];
-var arrTiles = [];
 var bestScore = 0;
 var thisScore = 0;
 var maxLen=4; //array size
 var isNewGame = true;
 var hasMove = true;
+var hasLeftMove=true;
+var hasRightMove=true;
+var hasUpMove=true;
+var hasDownMove=true;
 
-
-var i =0;
 var a = 0;
 var b = 0;
-var objTile = [{'val': 0, 'top': 145, 'left': 145}];
-for (i=0;i<maxLen;i++) {
+for (var i=0;i<maxLen;i++) {
     arrData.push([0,0,0,0]);
 }
-for (a=0; a<maxLen; a++){ //row 0-3
-    for(b=0; b<maxLen; b++) { //col 0-3
-        objTile.val = 0;
-        objTile.top = getPx(a);
-        objTile.left = getPx(b);
-        arrTiles[a][b].push(objTile);
-    }
-}
+
 function printArray() { //function to print array
     for (var y in arrData) {console.log(arrData[y]);}
     console.log('-------------------');
     return;
 }
-function PrintTiles() {
-    for (i=0;i<maxLen;i++){
-        for(a=0;a<maxLen;a++) {
-            console.log(arrayTiles[i][a].value);
-        }
-    }
-    console.log('-----------------');
-}
+
 function newGame() { //clear matrix to v = 0
     for (var y in arrData) {
         for (var x in arrData) {
             arrData[y][x] = 0;
         }
     }
+    thisScore=0;
+    hasMove = true;
+     hasLeftMove=true;
+     hasRightMove=true;
+     hasUpMove=true;
+     hasDownMove=true;
     addTile();
     addTile();
 }
+
 function getRandNum(arrThis) { //pcik random idx return v
     var i = Math.floor(Math.random()*arrThis.length);
     return arrThis[i];
@@ -66,7 +59,7 @@ function addTile() {
         }
         if (z===maxLen) { //full row
         hasMove = false;
-        console.log("No More Move.");
+        alert("No More Move.");
         return;
         } else { //assign random array value=2,4
             tileValue = Math.floor(Math.random()*2)*2+2;
@@ -102,6 +95,7 @@ function sumLeft(arrThis){  //for 4 tiles only
         for(var i=0;i<arrA.length-1; i++){
             if(arrA[i]===arrA[i+1]) {
                 arrA[i] = arrA[i]+arrA[i+1];
+                thisScore = thisScore + arrA[i];
                 arrA[i+1] = 0;
             } else {
                 hasSameNum = false;
@@ -109,7 +103,9 @@ function sumLeft(arrThis){  //for 4 tiles only
         }
         arrA= toLeft(arrA);
     }
-    
+    if (thisScore > bestScore) {
+        bestScore = thisScore;
+    }
     if (arrA.length<maxLen) {
         for(var a=arrA.length; a<maxLen; a++) {
              arrA.push(0);
@@ -127,20 +123,12 @@ function toLeft(arrThis){
   return arrA;
 }
 
-function addValue(arrThis) {
-    //given array with four nodes
-    //if empty array, do nothing
-    //if node0 = 0 then shift 1,2,3 nodes
-    //if node0 = node1, then update node0, node1, move 2,3
-    //if 
-}
-
 function keyMoveLeft(){ //moveleft key
     var arrA=[]; //store tile value;
-    var hasLeftMove = false;
-    for (var i in arrData) { //loop row
+    hasLeftMove = false;
+    for (var i=0; i<maxLen; i++) { //loop row
         arrA = sumLeft(arrData[i]);
-        for (var a in arrData[i]) {
+        for (var a=0; a<maxLen; a++) {
             if (arrData[i][a]!==arrA[a]) {
                  hasLeftMove =true;
             } 
@@ -153,18 +141,89 @@ function keyMoveLeft(){ //moveleft key
    } 
     return;
 }
-// newGame();
-// printArray();
-// for(var x=1; x<20;x++) {
-//   keyMoveLeft();  
-//   if (!hasMove) {
-//       break;
-//   } else {
-//   console.log("move:",x);
-//   printArray();
-//   }
-// }
-printTiles();
+
+function keyMoveRight(){ //moveright key
+    var arrA=[]; //store tile value;
+    var arrReverse = [];
+    hasRightMove = false;
+    for (var i=0; i<maxLen; i++) { //loop row
+        //reverse 
+        for (var c=(maxLen-1); c>-1; c--) {
+             arrReverse.push(arrData[i][c])
+        }
+        arrA = sumLeft(arrReverse);
+        arrA = arrA.reverse();
+        for (var a=0; a<maxLen; a++) {
+            if (arrData[i][a]!==arrA[a]) {
+                 hasRightMove =true;
+            } 
+            arrData[i][a]=arrA[a];
+        }
+        arrA=[];
+        arrReverse=[];
+   }
+   if (hasRightMove) { //add tile if has move
+        addTile();
+   } 
+    return;
+}
+
+function keyMoveUp(){ //moveright key
+    var arrA=[]; //store tile value;
+    var arrCol=[]; 
+    hasUpMove = false;
+    
+    for (var i = 0; i<maxLen; i++) { //col
+        for (var a =0; a<maxLen; a++){ //row
+            arrCol.push(arrData[a][i]);
+        }
+        arrA = sumLeft(arrCol);
+        
+        for (a=0; a<maxLen; a++) {
+            if (arrData[a][i]!==arrA[a]) {
+                 hasUpMove =true;
+            } 
+            arrData[a][i]=arrA[a];
+        }
+        arrA=[];
+        arrCol=[];
+   }
+   if (hasUpMove) { //add tile if has move
+   addTile();
+   } 
+    return;
+}
+
+function keyMoveDown(){ //movedown key
+    var arrA=[]; //store tile value;
+    var arrCol=[]; 
+    hasDownMove = false;
+    
+    for (var i = 0; i<maxLen; i++) { //col
+        for (var a =0; a<maxLen; a++){ //row
+            arrCol.push(arrData[a][i]);
+        }
+        arrA = sumLeft(arrCol.reverse());
+        arrA = arrA.reverse();
+        for (a=0; a<maxLen; a++) {
+            if (arrData[a][i]!==arrA[a]) {
+                 hasDownMove =true;
+            } 
+            arrData[a][i]=arrA[a];
+        }
+        arrA=[];
+        arrCol=[];
+   }
+   if (hasDownMove) { //add tile if has move
+        addTile();
+   } 
+    return;
+}
+
+
+
+newGame();
+printArray();
 
 
 
