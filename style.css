@@ -1,0 +1,91 @@
+	body{
+		color: #FAF8EF;
+    	background: #faf8ef;
+    	margin: 0px 140px;
+    	padding: 0px;
+    	color: #FAF8EF;
+    	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    	font-size: 18px;
+    	display:flex;
+		flex-direction: column;
+
+	}
+	.title {
+	display: block;
+	position: absolute;
+	width: 100px;
+	top: 30px;
+    color: #776E65;
+    font-size: 50px;
+    font-weight: bold;		
+	}
+	.tblScore-cell {
+	padding-left: 5px;
+   	color: #eee4da;
+    font-size: 16px;
+	width: 100px;
+	height: 60px;
+	background-color: #bbada0;
+	vertical-align: top;
+	}
+	.tblScore {
+		position: absolute;
+		top: 30px;
+		left: 300px;
+		border-radius: 5px;
+		border-spacing: 5px;
+		border-collapse: separate;
+	}
+	.tbl-cell {
+		width: 60px;
+		height: 60px;
+		background-color: #D0C6A8;
+	}
+	.tbl {
+		position: absolute;
+		top: 140px;
+		background-color: #989587;
+		border-radius: 5px;
+		border-spacing: 5px;
+		border-collapse: separate;
+	}
+	.best, .score {
+		position: absolute;
+		color: #FAF8EF;
+    	font-size: 20px;
+    	font-weight: bold;
+    	text-align: right;
+	}
+	.score {
+		top:25px;
+    	left:15px;
+	}
+	.best {
+		top:25px;
+		left:126px;
+	}
+	.start {
+		position: absolute;
+		background-color:#989587;
+		width: 100px;
+		height: 30px;
+		font-size: 14px;
+		font-weight: bold;
+		top: 100px;
+		left: 150px;
+		line-height: 30px;
+		text-align: center;
+		border-radius: 5px;
+
+	}
+	.tile {
+	position:absolute;
+	color: #776e65;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 55px;
+	background-color: #eee4da;
+	width:60;
+	height:60;
+	}

@@ -1,0 +1,141 @@
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+		<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="title">2048</div>
+<table class='tblScore'>
+	<tr>
+		<td class="tblScore-cell">score<span class="score"></span></td>
+		<td class="tblScore-cell">best<span class="best"></span></td>
+	</tr>
+</table>
+<div class="start"><a>New Game</a></div>
+<table class="tbl">
+	<tr class="tbl-row">
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+  	</tr>
+	<tr class="tbl-row">
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+  	</tr>
+  	<tr class="tbl-row">
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+  	</tr>
+  	<tr class="tbl-row">
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+    	<td class="tbl-cell"></td>
+  	</tr>
+</table>
+<div class="tileHolder">
+</div>
+<div class='result'></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="script.js"></script>
+<script>
+
+$(document).keydown(function(e) {
+	    switch(e.which || e.keycode) {
+	        case 37: // left
+		        keyMoveLeft();
+		        printArray();
+	        break;
+
+	        case 38: // up
+	            keyMoveUp();
+		        printArray();
+	        break;
+
+	        case 39: // right
+		        keyMoveRight();
+		        printArray();
+	        break;
+
+	        case 40: // down
+	        	keyMoveDown();
+	        	printArray();
+	        break;
+
+	        default: return; // exit this handler for other keys
+    	}
+    $(".score").text(thisScore);
+	$(".best").text(bestScore);	
+
+    e.preventDefault(); // prevent the default action (scroll / move caret)
+
+
+		var minVal = 145; //origin start at (145,145)
+		var incr = 65; // x = minVal+incr*(x+1);
+		var topV = 0;
+		var leftV = 0;
+	   var box = $(".tileHolder");
+	   box.empty();
+	     for (var i =0; i<maxLen; i++) { //row
+	     	for (var a=0; a<maxLen; a++) {  //col
+	     		topV = minVal+incr*i;
+	     		leftV = minVal+incr*a;
+	     		if(arrData[i][a]>0) {
+	      		    $('<div/>', {
+					    class: 'tile',
+					    style: "top:"+ topV + "px;left:" + leftV + "px",
+					    text: arrData[i][a]
+					}).appendTo(box);
+				}
+			}
+		}
+		if(!hasLeftMove && !hasRightMove && !hasUpMove && !hasDownMove) {
+			thisScore = 0;
+			alert("Game End");
+		}
+
+});
+
+
+$(document).ready(function() {
+
+
+$('div.start').click(function(){
+    
+        var minVal = 145; //origin start at (145,145)
+		var incr = 65; // x = minVal+incr*(x+1);
+		var topV = 0;
+		var leftV = 0;
+	   var box = $(".tileHolder");
+	   box.empty();
+	   newGame();
+	    $(".score").text(0);
+	     for (var i =0; i<maxLen; i++) { //row
+	     	for (var a=0; a<maxLen; a++) {  //col
+	     		topV = minVal+incr*i;
+	     		leftV = minVal+incr*a;
+	     		if(arrData[i][a]>0) {
+	      		    $('<div/>', {
+					    class: 'tile',
+					    style: "top:"+ topV + "px;left:" + leftV + "px",
+					    text: arrData[i][a]
+					}).appendTo(box);
+				}
+			}
+		}
+});
+
+});
+
+
+</script>
+</body>
+</html>
